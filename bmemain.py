@@ -15,7 +15,7 @@ from datetime import datetime
 
 time_between_reads = .5
 time_between_reads_0 = 0  # For when this file gets imported
-
+start_time = time.time()
 credentials = ['host_name', 'influxdb_host', 'influxdb_port', 'influxdb_user', 'influxdb_pass', 'influxdb_db']
 built_in_credentials = False
 credentials_file = "credentials.txt"
@@ -55,9 +55,12 @@ def credentials_setup():
             spot += 1
 
 
-def write_to_influx(temperature, humidity, pressure, errors_corrected, run_count, run_time, influx_credentials):
+def write_to_influx(temperature, humidity, pressure, errors_corrected, run_count, fun_run_time, influx_credentials):
     global credentials
+    global start_time
+    # When run_time isn't set up here I only report 0
     host_name, influxdb_host, influxdb_port, influxdb_user, influxdb_pass, influxdb_db = influx_credentials
+    run_time = time.time() - start_time
     bme280_data = [
         {
             "measurement": "bme280",
@@ -93,7 +96,6 @@ def bme280_check_script(credentials):
     old_pressure = 1005
     errors_corrected = 0
     run_count = 0
-    start_time = time.time()
     run_loop = True
     while run_loop is True:
 
