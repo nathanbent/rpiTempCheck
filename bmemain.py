@@ -55,12 +55,8 @@ def credentials_setup():
             spot += 1
 
 
-def write_to_influx(temperature, humidity, pressure, errors_corrected, run_count, fun_run_time, influx_credentials):
-    global credentials
-    global start_time
-    # When run_time isn't set up here I only report 0
+def write_to_influx(temperature, humidity, pressure, run_count, run_time, errors_corrected, influx_credentials):
     host_name, influxdb_host, influxdb_port, influxdb_user, influxdb_pass, influxdb_db = influx_credentials
-    run_time = time.time() - start_time
     bme280_data = [
         {
             "measurement": "bme280",
@@ -77,7 +73,8 @@ def write_to_influx(temperature, humidity, pressure, errors_corrected, run_count
             }
         }
     ]
-
+    print(run_time)
+    print((run_count))
     try:
         client = InfluxDBClient(influxdb_host, influxdb_port, influxdb_user, influxdb_pass, influxdb_db)
 
